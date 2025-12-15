@@ -14,7 +14,7 @@ require("dotenv").config();
 
 // Routes
 app.get("/", (req, res) => {
-  res.send("API is running...");
+  res.send("Welcome to the To-Do List API!");
 });
 
 app.use("/", taskRoutes);
