@@ -34,6 +34,9 @@ exports.getTaskById = async (req, res) => {
     }
     res.status(200).json(task);
   } catch (error) {
+    if (error.name === "CastError") {
+      return res.status(404).json({ message: "Task not found" });
+    }
     res.status(500).json({ message: "Server Error", error: error.message });
   }
 };
@@ -56,6 +59,9 @@ exports.updateTaskById = async (req, res) => {
       .json({ message: "Task updated Successfully ✅", updatedTask });
   } catch (error) {
     console.error(error);
+    if (error.name === "CastError") {
+      return res.status(404).json({ message: "Task not found" });
+    }
     res.status(500).json({ message: "Server Error", error: error.message });
   }
 };
@@ -70,6 +76,9 @@ exports.deleteTaskById = async (req, res) => {
     }
     res.status(200).json({ message: "Task deleted Successfully ✅" });
   } catch (error) {
+    if (error.name === "CastError") {
+      return res.status(404).json({ message: "Task not found" });
+    }
     res.status(500).json({ message: "Server Error", error: error.message });
   }
 };
