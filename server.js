@@ -3,6 +3,8 @@ const cors = require("cors");
 
 const connectDB = require("./config/db");
 
+const taskRoutes = require("./routes/taskRoute");
+
 const app = express();
 
 app.use(express.json());
@@ -14,6 +16,8 @@ require("dotenv").config();
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
+
+app.use("/", taskRoutes);
 
 const PORT = process.env.PORT || 5000;
 
