@@ -19,9 +19,6 @@ exports.createTask = async (req, res) => {
 exports.getAllTasks = async (req, res) => {
   try {
     const tasks = await Task.find().sort({ createdAt: -1 });
-    if (tasks.length === 0) {
-      return res.status(404).json({ message: "No tasks found" });
-    }
     res.status(200).json(tasks);
   } catch (error) {
     res.status(500).json({ message: "Server Error", error: error.message });
@@ -49,7 +46,7 @@ exports.updateTaskById = async (req, res) => {
     const updatedTask = await Task.findByIdAndUpdate(
       id,
       { title, description, isCompleted },
-      { new: true }
+      { new: true, runValidators: true }
     );
     if (!updatedTask) {
       return res.status(404).json({ message: "Task not found" });
@@ -59,6 +56,20 @@ exports.updateTaskById = async (req, res) => {
       .json({ message: "Task updated Successfully ✅", updatedTask });
   } catch (error) {
     console.error(error);
+    res.status(500).json({ message: "Server Error", error: error.message });
+  }
+};
+
+// Delete a task by ID
+exports.deleteTaskById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedTask = await Task.findByIdAndDelete(id);
+    if (!deletedTask) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+    res.status(200).json({ message: "Task deleted Successfully ✅" });
+  } catch (error) {
     res.status(500).json({ message: "Server Error", error: error.message });
   }
 };
